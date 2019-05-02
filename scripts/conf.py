@@ -17,7 +17,7 @@ def set_prop(prop, val):
 	confFile.write(val)
 	confFile.close()
 
-def check_prop_exists(prop):
+def check_prop_exist(prop):
 	try:
 		if (os.file.exists("../conf/" + prop)):
 			return True
@@ -26,7 +26,7 @@ def check_prop_exists(prop):
 		return False
 
 def build_config_file(name):
-	if (not os.directory.exists("../conf")): os.system("mkdir ../conf")
+	if (not os.path.exists("../conf")): os.system("mkdir ../conf")
 	os.system("touch ../conf/" + name)
 	return open("../conf/" + name, 'w')
 
