@@ -1,9 +1,10 @@
-# This file will have methods to fetch the slideX.swf files and (possibly)
+# his file will have methods to fetch the slideX.swf files and (possibly)
 # remove the desired contents into a specified folder
 
 import os
 import io
 import time
+import conf
 
 swftools_path = "~/swftools/src/" #TODO: replace with config system
 
@@ -37,8 +38,23 @@ def fetch_all(url, out_dir):
 def extract_audio(swf_path, out_path):
 	os.system("../lib/swftools/swfextract -m -o " + out_path + " " + swf_path)
 
+def extract_audio_all(swf_dir):
+	swfList = []
+	for swf in os.listdir(swf_dir):
+		if (swf.find(".swf") is not -1): swfList.add(swf)
+
+	for swf in swflist:
+		# extract_audio 
+		pass
+
 def get_linked_text(swf_name):
-	#TODO: convert "Lesson XX notes.pdf" to plaintext, find associated notes and return
 	pass
+	#TODO: convert "Lesson XX notes.pdf" to plaintext, find associated notes and return
+
+def convert_pdf(in_path, out_path):
+	pass
+	
+	
 
 #TODO: get_images, etc...
+
