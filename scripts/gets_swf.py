@@ -52,9 +52,8 @@ def get_linked_text(swf_name):
 	#TODO: convert "Lesson XX notes.pdf" to plaintext, find associated notes and return
 
 def convert_pdf(in_path, out_path):
+ 	#TODO: use the code in PDFminer_test
 	pass
-	
-	
 
 #TODO: get_images, etc...
 
