@@ -6,7 +6,7 @@ import os
 def get_prop(prop):
 	try: 
 		confFile = open("../conf/" + prop, 'r')
-		val = confFile.read()
+		val = confFile.read().replace("\n", "")
 		confFile.close()
 		return(val)
 	except:
@@ -14,7 +14,7 @@ def get_prop(prop):
 		
 def set_prop(prop, val):
 	confFile = build_config_file(prop)
-	confFile.write(val)
+	confFile.write(val + "\n")
 	confFile.close()
 
 def check_prop_exist(prop):
