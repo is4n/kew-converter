@@ -39,16 +39,23 @@ def fetch_all(url, out_dir):
 	# cleans up
 	os.system("rm -r " + out_dir + "/.cache")
 
+def get_swf_list(swf_dir):
+	swfList = []
+
+	# iterates through swf_dir and gets every .swf file
+	for swf in os.listdir(swf_dir):
+		if (swf.find(".swf") is not -1): swfList.append(swf)
+
+	return swfList
+
 def extract_audio(swf_path, out_path):
 	os.system(conf.get_prop("swftools_path") + "swfextract -m -o " + out_path + " " + swf_path)
 
 def extract_audio_all(swf_dir):
-	# get list of SWFs
-	swfList = []
-	for swf in os.listdir(swf_dir):
-		if (swf.find(".swf") is not -1): swfList.append(swf)
-	
+	# gets list of SWFs
+	swfList = get_swf_list(swf_dir)
 	swfIndex = 1
+
 	for swf in swfList:
 		# extract_audio 
 		print ("input file: " + swf_dir + swf)
@@ -57,13 +64,25 @@ def extract_audio_all(swf_dir):
 		extract_audio(swf_dir + swf, swf_dir + swf[:-4] + "/audio.mp3")
 		swfIndex = swfIndex + 1
 
-def extract_images(swf_path, out_path):
-	pass
+def extract_images(swf_path, out_dir):
+	# gets ids for images in SWF
+	imageIds = get_image_ids(swf_path)
+	
+	# use swfextract to extract images based off id
+	for imageId in imageIds:
+		os.system(conf.get_prop("swftools_path") + "swfextract -j " + str(imageId) +\
+			" -o " + out_dir + "/" + str(imageId) + ".jpg " + swf_path)
+
+def extract_images_all(swf_dir):
+	swfList = get_swf_list(swf_dir)
+	
+	for swf in swfList:
+		extract_images(swf_dir + swf, swf_dir + swf[:4])
 
 def get_image_ids(swf_path):
 	# gets the output of swftools
-	swfextractOut = str(subprocess.check_output([conf.get_prop("swftools_path")\
-		+ "swfextract", swf_path]))
+	swfextractOut = str(subprocess.check_output([conf.get_prop("swftools_path") +\
+		"swfextract", swf_path]))
 
 	# finds the string with the JPEG ids
 	beginpoint = swfextractOut.find("JPEG")
@@ -72,7 +91,7 @@ def get_image_ids(swf_path):
 		ids = []
 		# finds start/end of the juicy bits 
 		startpoint = swfextractOut.find(")", beginpoint) + 2
-		endpoint = swfextractOut.find("\n", startpoint)
+		endpoint = swfextractOut.find('\\n', beginpoint)
 		idsStr = swfextractOut[startpoint:endpoint]
 
 		# prints debug info

@@ -14,6 +14,8 @@ if __name__ == "__main__":
 		print("5 = conf.get_prop")
 		print("6 = conf.check_prop_exists")
 		print("7 = gets_swf.gets_image_IDs")
+		print("8 = extract_images")
+		print("9 = extract_images_all")
 
 	else:
 		if (sys.argv[1] == "0"): gets_swf.fetch_all(sys.argv[2], sys.argv[3])
@@ -24,4 +26,6 @@ if __name__ == "__main__":
 		if (sys.argv[1] == "5"): print(conf.get_prop(sys.argv[2]))
 		if (sys.argv[1] == "6"): print(conf.check_prop_exist(sys.argv[2]))
 		if (sys.argv[1] == "7"): print(gets_swf.get_image_ids(sys.argv[2]))
+		if (sys.argv[1] == "8"): gets_swf.extract_images(sys.argv[2], sys.argv[3])
+		if (sys.argv[1] == "9"): gets_swf.extract_images_all(sys.argv[2])
 
