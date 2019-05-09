@@ -73,7 +73,7 @@ def extract_images(swf_path, out_dir):
 		os.system(conf.get_prop("swftools_path") + "swfextract -j " + str(imageId) +\
 			" -o " + out_dir + "/" + str(imageId) + ".jpg " + swf_path)
 
-def extract_images_all(swf_dir):
+def extract_images_all(swf_dir): #TODO: test 
 	swfList = get_swf_list(swf_dir)
 	
 	for swf in swfList:

@@ -5,6 +5,7 @@ import conf
 import gets_swf
 
 if __name__ == "__main__":
+	#TODO: add automatic test mode 
 	if (len(sys.argv) == 1):
 		print("0 = gets_swf.fetch_all")
 		print("1 = gets_swf.extract_audio")
