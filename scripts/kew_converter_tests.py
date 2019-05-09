@@ -13,6 +13,7 @@ if __name__ == "__main__":
 		print("4 = conf.set_prop")
 		print("5 = conf.get_prop")
 		print("6 = conf.check_prop_exists")
+		print("7 = gets_swf.gets_image_IDs")
 
 	else:
 		if (sys.argv[1] == "0"): gets_swf.fetch_all(sys.argv[2], sys.argv[3])
@@ -22,3 +23,5 @@ if __name__ == "__main__":
 		if (sys.argv[1] == "4"): conf.set_prop(sys.argv[2], sys.argv[3])
 		if (sys.argv[1] == "5"): print(conf.get_prop(sys.argv[2]))
 		if (sys.argv[1] == "6"): print(conf.check_prop_exist(sys.argv[2]))
+		if (sys.argv[1] == "7"): print(gets_swf.get_image_ids(sys.argv[2]))
+
