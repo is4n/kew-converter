@@ -59,7 +59,7 @@ def extract_audio_all(swf_dir):
 	for swf in swfList:
 		# extract_audio 
 		print ("input file: " + swf_dir + swf)
-		print ("output file: " + swf_dir + swf[:4] + "/audio.mp3")
+		print ("output file: " + swf_dir + swf[:-4] + "/audio.mp3")
 		
 		extract_audio(swf_dir + swf, swf_dir + swf[:-4] + "/audio.mp3")
 		swfIndex = swfIndex + 1
@@ -73,11 +73,11 @@ def extract_images(swf_path, out_dir):
 		os.system(conf.get_prop("swftools_path") + "swfextract -j " + str(imageId) +\
 			" -o " + out_dir + "/" + str(imageId) + ".jpg " + swf_path)
 
-def extract_images_all(swf_dir): #TODO: test 
+def extract_images_all(swf_dir): 
 	swfList = get_swf_list(swf_dir)
 	
 	for swf in swfList:
-		extract_images(swf_dir + swf, swf_dir + swf[:4])
+		extract_images(swf_dir + swf, swf_dir + swf[:-4])
 
 def get_image_ids(swf_path):
 	# gets the output of swftools
