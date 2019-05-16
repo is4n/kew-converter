@@ -19,23 +19,41 @@ def fetch_all(url, out_dir):
 	htmlLines = lsnIndex.read().split("\n")
 	swfFilesCount = 0
 	swfFiles = []
-
+	
+	# iterates through every line in index page
 	for line in htmlLines:
+		# if this is an .swf slide, download it
 		if (line.find("page") != -1): 
 			print("fetching page " + str(swfFilesCount + 1)) 
 
 			if os.path.exists(out_dir + "/page" + str(swfFilesCount + 1) + ".swf"):
 				print ("file aready exists -- skipping this page")
-			else: os.system("wget " + url + "/page" + str(swfFilesCount + 1) + ".swf" + \
-				" -O \"" + out_dir + "/page" + str(swfFilesCount + 1) + ".swf\"")
+			else:
+				os.system("wget " + url + "/page" + str(swfFilesCount + 1) + ".swf" + \
+					" -O \"" + out_dir + "/page" + str(swfFilesCount + 1) + ".swf\"")
+				time.sleep(1.5) # be nice to the servers
 
 			# create folders for dumping SWF contents into
 			os.system("mkdir " + out_dir + "/page" + str(swfFilesCount + 1) + "/") 
-			time.sleep(1.5) # be nice to the servers
 			swfFilesCount = swfFilesCount + 1
 
+		# if this is the PDF notes for the lesson download them too
+		if (line.find("pdf") != -1):
+			print("fetching PDF text")
+
+			# Identify lesson number
+			#TODO: This solution is hacky - if the lesson is hosted anywhere else
+			# without a URL format exactly the way it is now, this will break
+			lesson = ""
+			if (url[len(url) - 1] == "/"): lesson = url[url.find("lesson") + 6:-1]
+			else: lesson = url[url.find("lesson") + 6]
+
+			os.system("wget \"" + url + "/Lesson " + lesson + " Notes.pdf\"" + \
+				" -O \"" + out_dir + "/text.pdf\"")
+
+
 	print ("downloaded " + str(swfFilesCount) + " files")
-	
+
 	# cleans up
 	os.system("rm -r " + out_dir + "/.cache")
 
@@ -95,8 +113,8 @@ def get_image_ids(swf_path):
 		idsStr = swfextractOut[startpoint:endpoint]
 
 		# prints debug info
-		print("starting point" + str(startpoint))
-		print("ending point" + str(endpoint))
+		print("starting point: " + str(startpoint))
+		print("ending point: " + str(endpoint))
 		print(swfextractOut[startpoint:endpoint])
 
 		if (idsStr.find(",") == -1): return [int(idsStr)]
@@ -107,11 +125,40 @@ def get_image_ids(swf_path):
 
 	return []
 		
-#TODO
-def get_linked_text(swf_name):
-	# if (os.path.exists(conf.get_prop("swftools_path") + "
-	pass
+def get_linked_text(page_num, text_path):
+	# reads notes file
+	ltRead = open(text_path, 'r')
+
+	# Cleans up PDF text - The space characters in replace(" ", " ") are actually different!
+	lessonText = ltRead.read().replace("", "-").replace(" ", " ")
+	ltRead.close()
+	
+	# find the start/end points of the wanted text
+	beginpoint = lessonText.find("Page " + str(page_num).strip())
+	startpoint = lessonText.find(":", beginpoint) + 1
+	endpoint = lessonText.find("Page " + str(int(page_num) + 1), startpoint)
+	
+	# prints debug info
+	print("page number: " + str(page_num))
+	print("find tex1: " + "Page " + str(page_num).strip())
+	print("begin point: " + str(beginpoint))
+	print("starting point: " + str(startpoint))
+	print("ending point: " + str(endpoint))
+	
+	return lessonText[startpoint:endpoint].strip()
+
+def get_linked_text_all(swf_dir):
+	# converts PDF to plaintext if it hasn't been done already
+	if (not os.path.exists(swf_dir + "text.txt")):
+		convert_pdf(swf_dir + "text.pdf", swf_dir + "text.txt")
+
+	swfList = get_swf_list(swf_dir)
+
+	for swf in swfList:
+		textWriter = open(swf_dir + swf[:-4] + "/text.txt", 'w')
+		textWriter.write(get_linked_text(int(swf[4:-4]), swf_dir + "text.txt"))
+		textWriter.close()
 
 def convert_pdf(in_path, out_path):
-	pdf_to_text(in_path, out_path)
+	converts_pdf.pdf_to_text(in_path, out_path)
 

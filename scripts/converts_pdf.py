@@ -2,7 +2,7 @@ import sys
 import conf
 
 def pdf_to_text(path_in, path_out):
-	if (conf.get_prop(use_pdf2txt) == '0'):
+	if (conf.get_prop("use_pdf2txt") == '0'):
 		try:
 			from pdfminer.pdfdocument import PDFDocument
 			from pdfminer.pdfparser import PDFParser
@@ -15,9 +15,9 @@ def pdf_to_text(path_in, path_out):
 			from pdfminer.image import ImageWriter	
 		except:
 			print ("system doesn't have PDFminer.six library installed. Try to use pdf2txt.")
-			use_pdf2txt = True
+			conf.set_prop("use_pdf2txt", "1")
 
-	if (not use_pdf2txt):
+	if (conf.get_prop("use_pdf2txt") == '0'):
 		rsrcmgr = PDFResourceManager(caching=True)
 		outfp = open(path_out, 'w')
 		codec = 'utf-8'
