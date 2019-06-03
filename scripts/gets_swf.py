@@ -1,5 +1,4 @@
-# his file will have methods to fetch the slideX.swf files and (possibly)
-# remove the desired contents into a specified folder
+# fetches the slideX.swf files and removes the desired contents into a specified folder
 
 import subprocess
 import os
@@ -161,4 +160,7 @@ def get_linked_text_all(swf_dir):
 
 def convert_pdf(in_path, out_path):
 	converts_pdf.pdf_to_text(in_path, out_path)
+
+def clean_up_all(swf_dir):
+	os.system("rm " + swf_dir + "*.swf " + swf_dir + "*.pdf")
 
